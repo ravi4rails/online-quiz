@@ -51,6 +51,7 @@ class TestPapersController < ApplicationController
 
   def preview_test
     @test_paper = TestPaper.find(params[:id])
+    @mcq = @test_paper.multiple_choice_questions.first
   end
 
   private

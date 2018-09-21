@@ -1,27 +1,41 @@
 <div class="container mt-5">
   <div class="row">
-    <div class="col-md-7">
-      <div class="card custom-card">
-        <div class="card-body">
-          <%= form_for :user_response, url: '#', method: :post do |f| %>
-            <% @test_paper.multiple_choice_questions.each do |mcq| %>
-              <label><%= mcq.question %></label>
-              <% mcq.mcq_options.each do |mcq_opt| %>
-                <div class="form-group">
-                  <%= f.radio_button mcq.question, mcq_opt.option %>
-                  <%= f.label mcq_opt.option %>
-                </div>
-              <% end %>
-            <% end %>
+    <div class="col-12">
+      <div class="row">
+        <div class="col-md-7">
+          <div class="card custom-card">
+            <div class="card-body">
+              <div id="test_question_area">
+                <%= form_for :user_response, url: '#', method: :post do |f| %>
+                  <label><strong><%= @mcq.sequence_number %>. </strong> <%= @mcq.question %></label>
+                  <% @mcq.mcq_options.each do |mcq_opt| %>
+                    <div class="form-group">
+                      <%= f.radio_button @mcq.question, mcq_opt.option %>
+                      <%= f.label mcq_opt.option %>
+                    </div>
+                  <% end %>
+                <% end %>
+                <% if @mcq.id == @test_paper.multiple_choice_questions.first.id %>
+                  <%= link_to "Previous", "", class: "btn btn-primary disabled" %>
+                <% else %>
+                  <%= link_to "Previous", load_previous_question_path(mcq_id: @mcq.id), class: "btn btn-primary", remote: true %>
+                <% end %>
+                <%= link_to "Save & Next", "", class: "btn btn-success" %>
+                <% if @mcq.id == @test_paper.multiple_choice_questions.last.id %>
+                  <%= link_to "Next", "", class: "btn btn-info disabled" %>
+                <% else %>
+                  <%= link_to "Next", load_next_question_path(mcq_id: @mcq.id), class: "btn btn-info", remote: true %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-5">
+          <% @test_paper.multiple_choice_questions.each do |mcq| %>
+            <%= link_to mcq.sequence_number, load_question_path(mcq_id: mcq.id), class: "btn btn-secondary", remote: true %>
           <% end %>
         </div>
       </div>
-    </div>
-    <div class="col-md-5">
-      <% total_questions = @test_paper.multiple_choice_questions.count %>
-      <% total_questions.times do |i| %>
-        <button><%= i+1 %></button>
-      <% end %>
     </div>
   </div>
 </div>

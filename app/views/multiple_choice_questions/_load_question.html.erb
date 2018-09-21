@@ -1,0 +1,20 @@
+<%= form_for :user_response, url: '#', method: :post do |f| %>  
+  <label><strong><%= mcq.sequence_number %>. </strong> <%= mcq.question %></label>
+  <% mcq.mcq_options.each do |mcq_opt| %>
+    <div class="form-group">
+      <%= f.radio_button mcq.question, mcq_opt.option %>
+      <%= f.label mcq_opt.option %>
+    </div>
+  <% end %>
+<% end %>
+<% if mcq.id == @test_paper.multiple_choice_questions.first.id %>
+  <%= link_to "Previous", "", class: "btn btn-primary disabled" %>
+<% else %>
+  <%= link_to "Previous", load_previous_question_path(mcq_id: mcq.id), class: "btn btn-primary", remote: true %>
+<% end %>
+<%= link_to "Save & Next", "", class: "btn btn-success" %>
+<% if mcq.id == @test_paper.multiple_choice_questions.last.id %>
+  <%= link_to "Next", "", class: "btn btn-info disabled" %>
+<% else %>
+  <%= link_to "Next", load_next_question_path(mcq_id: mcq.id), class: "btn btn-info", remote: true %>
+<% end %>
