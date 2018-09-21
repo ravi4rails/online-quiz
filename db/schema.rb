@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_21_073642) do
+ActiveRecord::Schema.define(version: 2018_09_21_155517) do
 
   create_table "mcq_options", force: :cascade do |t|
     t.string "option"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 2018_09_21_073642) do
     t.integer "test_paper_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "sequence_number"
     t.index ["test_paper_id"], name: "index_multiple_choice_questions_on_test_paper_id"
   end
 
