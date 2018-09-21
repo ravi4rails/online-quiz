@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Test Papers</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Date to take test</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @test_papers.each do |test_paper| %>
+      <tr>
+        <td><%= test_paper.name %></td>
+        <td><%= test_paper.date_to_take_test %></td>
+        <td><%= link_to 'Show', test_paper %></td>
+        <td><%= link_to 'Edit', edit_test_paper_path(test_paper) %></td>
+        <td><%= link_to 'Destroy', test_paper, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Test Paper', new_test_paper_path %>

@@ -1,0 +1,23 @@
+<div class="nested-fields">
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="form-group">
+        <%= f.text_area :question, class: "form-control", placeholder: "Write Question Here", rows: "3" %>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="form-group">
+        <%= link_to_remove_association "Remove MCQ", f, class: "btn btn-danger" %>
+      </div>
+    </div>
+  </div>
+  <div id="mcq_options">
+    <%= f.fields_for :mcq_options do |option| %>
+      <%= render 'mcq_option_fields', f: option %>
+    <% end %>
+    <div class="links">
+      <%= link_to_add_association 'Add Option', f, :mcq_options, class: "btn btn-primary" %>
+      <hr>
+    </div>
+  </div>
+</div>
