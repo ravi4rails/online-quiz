@@ -12,11 +12,13 @@ Rails.application.routes.draw do
   resources :test_papers do 
     member do 
       get :preview_test
+      post :start_test_paper
     end
   end
 
   resources :multiple_choice_questions do 
   end
+  resources :user_response_values
 
   get '/load_question' => 'multiple_choice_questions#load_question'
   get '/load_previous_question' => 'multiple_choice_questions#load_previous_question'

@@ -1,5 +1,6 @@
 class TestPapersController < ApplicationController
   before_action :set_test_paper, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: [:preview_test, :start_test_paper]
 
   def index
     @test_papers = TestPaper.all
@@ -52,6 +53,13 @@ class TestPapersController < ApplicationController
   def preview_test
     @test_paper = TestPaper.find(params[:id])
     @mcq = @test_paper.multiple_choice_questions.first
+    @submission = Submission.find(params[:submission])
+  end
+
+  def start_test_paper
+    @test_paper = TestPaper.find(params[:id])
+    @submission = Submission.create(user_id: current_user.id, test_paper_id: @test_paper.id)
+    redirect_to preview_test_test_paper_path(@test_paper, submission: @submission.id)
   end
 
   private

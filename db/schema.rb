@@ -10,11 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_22_152134) do
+ActiveRecord::Schema.define(version: 2018_09_22_161432) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "mcq_options", force: :cascade do |t|
     t.string "option"
-    t.integer "multiple_choice_question_id"
+    t.bigint "multiple_choice_question_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["multiple_choice_question_id"], name: "index_mcq_options_on_multiple_choice_question_id"
@@ -22,7 +25,7 @@ ActiveRecord::Schema.define(version: 2018_09_22_152134) do
 
   create_table "multiple_choice_questions", force: :cascade do |t|
     t.text "question"
-    t.integer "test_paper_id"
+    t.bigint "test_paper_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "sequence_number"
@@ -31,8 +34,8 @@ ActiveRecord::Schema.define(version: 2018_09_22_152134) do
   end
 
   create_table "submissions", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "test_paper_id"
+    t.bigint "user_id"
+    t.bigint "test_paper_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["test_paper_id"], name: "index_submissions_on_test_paper_id"
@@ -47,11 +50,12 @@ ActiveRecord::Schema.define(version: 2018_09_22_152134) do
   end
 
   create_table "user_response_values", force: :cascade do |t|
-    t.integer "submission_id"
-    t.integer "multiple_choice_question_id"
-    t.integer "user_id"
+    t.bigint "submission_id"
+    t.bigint "multiple_choice_question_id"
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "form_values", default: "{}", null: false
     t.index ["multiple_choice_question_id"], name: "index_user_response_values_on_multiple_choice_question_id"
     t.index ["submission_id"], name: "index_user_response_values_on_submission_id"
     t.index ["user_id"], name: "index_user_response_values_on_user_id"
@@ -74,4 +78,11 @@ ActiveRecord::Schema.define(version: 2018_09_22_152134) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "mcq_options", "multiple_choice_questions"
+  add_foreign_key "multiple_choice_questions", "test_papers"
+  add_foreign_key "submissions", "test_papers"
+  add_foreign_key "submissions", "users"
+  add_foreign_key "user_response_values", "multiple_choice_questions"
+  add_foreign_key "user_response_values", "submissions"
+  add_foreign_key "user_response_values", "users"
 end
