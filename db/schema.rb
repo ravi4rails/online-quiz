@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_21_155517) do
+ActiveRecord::Schema.define(version: 2018_09_22_152134) do
 
   create_table "mcq_options", force: :cascade do |t|
     t.string "option"
@@ -26,7 +26,17 @@ ActiveRecord::Schema.define(version: 2018_09_21_155517) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "sequence_number"
+    t.string "status"
     t.index ["test_paper_id"], name: "index_multiple_choice_questions_on_test_paper_id"
+  end
+
+  create_table "submissions", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "test_paper_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["test_paper_id"], name: "index_submissions_on_test_paper_id"
+    t.index ["user_id"], name: "index_submissions_on_user_id"
   end
 
   create_table "test_papers", force: :cascade do |t|
@@ -34,6 +44,34 @@ ActiveRecord::Schema.define(version: 2018_09_21_155517) do
     t.date "date_to_take_test"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "user_response_values", force: :cascade do |t|
+    t.integer "submission_id"
+    t.integer "multiple_choice_question_id"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["multiple_choice_question_id"], name: "index_user_response_values_on_multiple_choice_question_id"
+    t.index ["submission_id"], name: "index_user_response_values_on_submission_id"
+    t.index ["user_id"], name: "index_user_response_values_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
 end

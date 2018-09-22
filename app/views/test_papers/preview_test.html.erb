@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-12">
       <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-9">
           <div class="card custom-card">
             <div class="card-body">
               <div id="test_question_area">
@@ -30,9 +30,9 @@
             </div>
           </div>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-3">
           <% @test_paper.multiple_choice_questions.each do |mcq| %>
-            <%= link_to mcq.sequence_number, load_question_path(mcq_id: mcq.id), class: "btn btn-secondary", remote: true %>
+            <%= link_to mcq.sequence_number, load_question_path(mcq_id: mcq.id), class: "btn btn-secondary btn-mark mb-2", remote: true %>
           <% end %>
         </div>
       </div>
@@ -44,5 +44,8 @@
   .custom-card {
     border-radius:0px;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)!important;
+  }
+  .btn-mark {
+    width: 50px;
   }
 </style>
