@@ -12,10 +12,21 @@
                   <%= f.hidden_field :user_id, value: current_user.id %>
                   <label><strong><%= @mcq.sequence_number %>. </strong> <%= @mcq.question %></label>
                   <% @mcq.mcq_options.each do |mcq_opt| %>
-                    <div class="form-group">
-                      <%= f.radio_button @mcq.question, mcq_opt.option %>
-                      <%= f.label mcq_opt.option %>
-                    </div>
+                    <% if check_if_answered(current_user.id, @mcq.id) %>
+                      <div class="form-group">
+                        <% if user_selected_option(current_user.id, @mcq.id) == mcq_opt.option %>
+                          <%= f.radio_button @mcq.question, mcq_opt.option, checked: true %>
+                        <% else %>
+                          <%= f.radio_button @mcq.question, mcq_opt.option %>
+                        <% end %>
+                        <%= f.label mcq_opt.option %>
+                      </div>
+                    <% else %>
+                      <div class="form-group">
+                        <%= f.radio_button @mcq.question, mcq_opt.option %>
+                        <%= f.label mcq_opt.option %>
+                      </div>
+                    <% end %>
                   <% end %>
                   <% if @mcq.id == @test_paper.multiple_choice_questions.first.id %>
                     <%= link_to "Previous", "", class: "btn btn-primary disabled" %>

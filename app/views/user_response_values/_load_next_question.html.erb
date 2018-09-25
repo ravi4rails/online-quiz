@@ -8,10 +8,21 @@
           <%= f.hidden_field :user_id, value: current_user.id %>
           <label><strong><%= mcq.sequence_number %>. </strong> <%= mcq.question %></label>
           <% mcq.mcq_options.each do |mcq_opt| %>
-            <div class="form-group">
-              <%= f.radio_button mcq.question, mcq_opt.option %>
-              <%= f.label mcq_opt.option %>
-            </div>
+            <% if check_if_answered(current_user.id, mcq.id) %>
+              <div class="form-group">
+                <% if user_selected_option(current_user.id, mcq.id) == mcq_opt.option %>
+                  <%= f.radio_button mcq.question, mcq_opt.option, checked: true %>
+                <% else %>
+                  <%= f.radio_button mcq.question, mcq_opt.option %>
+                <% end %>
+                <%= f.label mcq_opt.option %>
+              </div>
+            <% else %>
+              <div class="form-group">
+                <%= f.radio_button @mcq.question, mcq_opt.option %>
+                <%= f.label mcq_opt.option %>
+              </div>
+            <% end %>
           <% end %>
           <% if mcq.id == test_paper.multiple_choice_questions.first.id %>
             <%= link_to "Previous", "", class: "btn btn-primary disabled" %>
@@ -33,9 +44,11 @@
 <div class="col-md-3">
   <% test_paper.multiple_choice_questions.each do |mcq| %>
     <% if mcq.question_user_statuses.present? && current_user.question_user_statuses.present? %>
-      <% if QuestionUserStatus.find_by(user_id: current_user.id, multiple_choice_question_id: mcq.id).status == "Answered" %>
+      <% user_id = current_user.id %>
+      <% mcq_id = mcq.id %>
+      <% if question_status(user_id, mcq_id) == "Answered" %>
         <%= link_to mcq.sequence_number, load_question_path(mcq_id: mcq.id, submission: submission.id), class: "btn btn-success btn-mark mb-2", remote: true %>
-      <% elsif QuestionUserStatus.find_by(user_id: current_user.id, multiple_choice_question_id: mcq.id).status == "Marked for Review" %>
+      <% elsif question_status(user_id, mcq_id) == "Marked for Review" %>
         <%= link_to mcq.sequence_number, load_question_path(mcq_id: mcq.id, submission: submission.id), class: "btn btn-indigo btn-mark mb-2", remote: true %>
       <% end %>
     <% else %>
