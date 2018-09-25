@@ -3,24 +3,42 @@ class UserResponseValuesController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    total_response_value = params[:user_response]
-    submission_values = {"user_id" => params[:user_response][:user_id], "multiple_choice_question_id" => params[:user_response][:multiple_choice_question_id], "submission_id" => params[:user_response][:submission_id]}
-    form_values = total_response_value.dup.delete_if {|k,_| submission_values.key?(k)}
-    puts form_values
-    @submission = Submission.find(params[:user_response][:submission_id])
-    @mcq = MultipleChoiceQuestion.find(params[:user_response][:multiple_choice_question_id])
-    @test_paper = @mcq.test_paper
-    @next_mcq = @test_paper.multiple_choice_questions.where('id > ?', @mcq.id).first
-    
-    @user_response_value = UserResponseValue.new(user_response_value_params)
-
-
-    respond_to do |format|
-      if @user_response_value.save 
-        @user_response_value.update(form_values: form_values)
-        QuestionUserStatus.create(user_id: current_user.id, multiple_choice_question_id: @mcq.id, status: "Answered")
+    if params[:user_response][:user_response_value_id].present?
+      total_response_value = params[:user_response]
+      submission_values = {
+        "user_id" => params[:user_response][:user_id], 
+        "multiple_choice_question_id" => params[:user_response][:multiple_choice_question_id], 
+        "submission_id" => params[:user_response][:submission_id],  
+        "already_answered"=>params[:user_response][:already_answered], 
+        "user_response_value_id" => params[:user_response][:user_response_value_id]
+      }
+      form_values = total_response_value.dup.delete_if {|k,_| submission_values.key?(k)}
+      @submission = Submission.find(params[:user_response][:submission_id])      
+      @mcq = MultipleChoiceQuestion.find(params[:user_response][:multiple_choice_question_id])      
+      @test_paper = @mcq.test_paper      
+      @next_mcq = @test_paper.multiple_choice_questions.where('id > ?', @mcq.id).first
+      @user_response_value = UserResponseValue.find(params[:user_response][:user_response_value_id])
+      @user_response_value.update(form_values: form_values)
+      respond_to do |format|
         format.js {}
-      end 
+      end
+    else
+      total_response_value = params[:user_response]
+      submission_values = {"user_id" => params[:user_response][:user_id], "multiple_choice_question_id" => params[:user_response][:multiple_choice_question_id], "submission_id" => params[:user_response][:submission_id]}
+      form_values = total_response_value.dup.delete_if {|k,_| submission_values.key?(k)}
+      puts form_values
+      @submission = Submission.find(params[:user_response][:submission_id])
+      @mcq = MultipleChoiceQuestion.find(params[:user_response][:multiple_choice_question_id])
+      @test_paper = @mcq.test_paper
+      @next_mcq = @test_paper.multiple_choice_questions.where('id > ?', @mcq.id).first
+      @user_response_value = UserResponseValue.new(user_response_value_params)
+      respond_to do |format|
+        if @user_response_value.save 
+          @user_response_value.update(form_values: form_values)
+          QuestionUserStatus.create(user_id: current_user.id, multiple_choice_question_id: @mcq.id, status: "Answered")
+          format.js {}
+        end 
+      end
     end
   end
 

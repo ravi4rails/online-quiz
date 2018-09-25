@@ -62,6 +62,10 @@ class TestPapersController < ApplicationController
     redirect_to preview_test_test_paper_path(@test_paper, submission: @submission.id)
   end
 
+  def test_submission
+    @test_paper = TestPaper.find(params[:test_paper_id])
+  end
+
   private
     
     def set_test_paper

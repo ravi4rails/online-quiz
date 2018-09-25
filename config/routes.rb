@@ -24,4 +24,5 @@ Rails.application.routes.draw do
   get '/load_previous_question' => 'multiple_choice_questions#load_previous_question'
   get '/load_next_question' => 'multiple_choice_questions#load_next_question'
   get '/question_marked_for_review' => 'user_response_values#question_marked_for_review'
+  get '/test_submission' => 'test_papers#test_submission'
 end

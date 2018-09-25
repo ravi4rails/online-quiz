@@ -18,6 +18,12 @@ module ApplicationHelper
     selected_option
   end
 
+  def get_user_response_value user_id, mcq_id
+    unless UserResponseValue.where(multiple_choice_question_id: mcq_id, user_id: user_id).empty? 
+      UserResponseValue.where(multiple_choice_question_id: mcq_id, user_id: user_id).last
+    end
+  end
+
 end
 
 
