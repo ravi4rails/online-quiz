@@ -1,12 +1,12 @@
 <div class="container mt-5">
   <div class="row">
     <div class="col-12">
-      <div class="row">
+      <div class="row" id="test_question_area">
         <div class="col-md-9">
           <div class="card custom-card">
             <div class="card-body">
-              <div id="test_question_area">
-                <%= form_for :user_response_value, url: :user_response_values, method: :post, remote: true do |f| %>
+              <div>
+                <%= form_for :user_response, url: :user_response_values, method: :post, remote: true do |f| %>
                   <%= f.hidden_field :submission_id, value: @submission.id %>
                   <%= f.hidden_field :multiple_choice_question_id, value: @mcq.id %>
                   <%= f.hidden_field :user_id, value: current_user.id %>
@@ -23,6 +23,7 @@
                     <%= link_to "Previous", load_previous_question_path(mcq_id: @mcq.id, submission: @submission.id), class: "btn btn-primary", remote: true %>
                   <% end %>
                   <%= f.submit "Save & Next", class: "btn btn-success" %>
+                  <%= link_to "Marked for Review & Next", question_marked_for_review_path(mcq_id: @mcq.id, submission_id: @submission.id), remote: true, class: "btn btn-primary btn-indigo" %>
                   <% if @mcq.id == @test_paper.multiple_choice_questions.last.id %>
                     <%= link_to "Next", "", class: "btn btn-info disabled" %>
                   <% else %>
@@ -35,7 +36,17 @@
         </div>
         <div class="col-md-3">
           <% @test_paper.multiple_choice_questions.each do |mcq| %>
-            <%= link_to mcq.sequence_number, load_question_path(mcq_id: mcq.id, submission: @submission.id), class: "btn btn-secondary btn-mark mb-2", remote: true %>
+            <% if mcq.question_user_statuses.present? && current_user.question_user_statuses.present? %>
+              <% user_id = current_user.id %>
+              <% mcq_id = mcq.id %>
+              <% if question_status(user_id, mcq_id) == "Answered" %>
+                <%= link_to mcq.sequence_number, load_question_path(mcq_id: mcq.id, submission: @submission.id), class: "btn btn-success btn-mark mb-2", remote: true %>
+              <% elsif question_status(user_id, mcq_id) == "Marked for Review" %>
+                <%= link_to mcq.sequence_number, load_question_path(mcq_id: mcq.id, submission: @submission.id), class: "btn btn-indigo btn-mark mb-2", remote: true %>
+              <% end %>
+            <% else %>
+              <%= link_to mcq.sequence_number, load_question_path(mcq_id: mcq.id, submission: @submission.id), class: "btn btn-secondary btn-mark mb-2", remote: true %>
+            <% end %>
           <% end %>
         </div>
       </div>
@@ -50,5 +61,10 @@
   }
   .btn-mark {
     width: 50px;
+  }
+  .btn-indigo, .btn-indigo:hover {
+    background-color: #4B0082;
+    border-color: #4B0082;
+    color:#fff;
   }
 </style>

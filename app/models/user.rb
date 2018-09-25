@@ -6,5 +6,6 @@ class User < ApplicationRecord
 
   has_many :submissions
   has_many :user_response_values
+  has_many :question_user_statuses
 
 end

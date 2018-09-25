@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_22_161432) do
+ActiveRecord::Schema.define(version: 2018_09_24_172929) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,14 @@ ActiveRecord::Schema.define(version: 2018_09_22_161432) do
     t.integer "sequence_number"
     t.string "status"
     t.index ["test_paper_id"], name: "index_multiple_choice_questions_on_test_paper_id"
+  end
+
+  create_table "question_user_statuses", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "multiple_choice_question_id"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "submissions", force: :cascade do |t|
