@@ -32,7 +32,7 @@
             <%= link_to "Previous", load_previous_question_path(mcq_id: mcq.id, submission: submission.id), class: "btn btn-primary", remote: true %>
           <% end %>
           <% if mcq.id == test_paper.multiple_choice_questions.last.id %>
-            <%= f.submit "Save", class: "btn btn-success" %>
+            <%= link_to "Submit", test_submission_path(test_paper_id: @test_paper.id), class: "btn btn-success" %>
           <% else %>
             <%= f.submit "Save & Next", class: "btn btn-success" %>
           <% end %>

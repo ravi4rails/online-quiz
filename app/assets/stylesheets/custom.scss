@@ -8,3 +8,33 @@
   padding:3% 4%;
   border: 1px solid #444;
 }
+.bg-color {
+  background-color: #deddde;
+}
+.login-navbar {
+  padding: 2.5rem 1rem !important;
+}
+.head-bg-color {
+  background-color: #676668;
+}
+.mt-top {
+  margin-top: -12px;
+}
+.font-12 {
+  font-size: 12px;
+}
+.status-button {
+  list-style: none;
+}
+.custom-card {
+  border-radius:0px;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)!important;
+}
+.btn-mark {
+  width: 50px;
+}
+.btn-indigo, .btn-indigo:hover {
+  background-color: #4B0082;
+  border-color: #4B0082;
+  color:#fff;
+}
