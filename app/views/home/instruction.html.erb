@@ -1,0 +1,22 @@
+<div class="container mt-3">
+  <div class="well">
+    <p>Please read the instructions carefully before starting test:</p>
+    <p><ul><li><strong>Once you click the 'Start test' button, you will have 20 minutes to answer the questions.</strong></li></p>
+    <p><li><strong>Each question will have multiple choices.</strong></li></p>
+    <p><li><strong>After the time for test expires or after you have attempted all questions, you will be logged out of the system.</strong></li></p>
+    <p><li><strong>Please do not refresh the page while taking test, if you do refresh, you will not be rewarded any marks for the question. </strong></li></p>
+    <p><li><strong>The test results will be announced offline by the System Administrator.</strong></li></p>
+    <p><li><strong>The Qusetion Palette displayed on the right side of the screen will shown the status of each question using one of the symbols :</strong>
+      <ul class="mt-3">
+        <li class="status-button"><div class="btn btn-secondary btn-mark mb-2">1</div> You have not visited the question yet.</li>
+        <li class="status-button"><div class="btn btn-indigo btn-mark mb-2">2</div> You have answered the question and marked question for review.</li>
+        <li class="status-button"><div class="btn btn-success btn-mark mb-2">3</div> You have saved and answered the question.</li>
+      </ul>
+    </li></ul></p>
+  </div>
+  <% if user_signed_in? %>
+    <%= link_to "Start Test", test_papers_path, class: "btn-lg btn-info"%>
+  <% else %>
+    <%= link_to "Start Test", new_user_session_path, class: "btn-lg btn-info"%>
+  <% end %>
+</div>

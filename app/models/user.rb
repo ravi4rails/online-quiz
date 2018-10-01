@@ -8,4 +8,11 @@ class User < ApplicationRecord
   has_many :user_response_values
   has_many :question_user_statuses
 
+  validate :validate_username
+
+  def validate_username
+    if User.where(username: username).exists?
+      errors.add(:username, "already exists")
+    end
+  end
 end
