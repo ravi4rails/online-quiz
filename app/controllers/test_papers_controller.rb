@@ -1,4 +1,6 @@
 class TestPapersController < ApplicationController
+  layout 'admin'
+  before_action :authenticate_admin!, only: [:create, :new, :edit, :update, :destroy]
   before_action :set_test_paper, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, only: [:preview_test, :start_test_paper]
 

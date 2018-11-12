@@ -20,6 +20,7 @@ class MultipleChoiceQuestionsController < ApplicationController
     @submission = Submission.find(params[:submission])
     @test_paper = @mcq.test_paper
     @next_mcq = @test_paper.multiple_choice_questions.where('id > ?', @mcq.id).first
+    @last_mcq = @test_paper.multiple_choice_questions.last
   end
 
 end

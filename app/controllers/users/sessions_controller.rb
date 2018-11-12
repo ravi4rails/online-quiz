@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Users::SessionsController < Devise::SessionsController
-  layout 'devise'
+  layout 'user'
   before_action :configure_sign_in_params, only: [:create]
 
   # GET /resource/sign_in
@@ -26,6 +26,6 @@ class Users::SessionsController < Devise::SessionsController
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_sign_in_params
-    devise_parameter_sanitizer.permit(:sign_in, keys: [:username])
+    devise_parameter_sanitizer.permit(:sign_in, keys: [:username, :email])
   end
 end

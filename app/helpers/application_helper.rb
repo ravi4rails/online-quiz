@@ -1,7 +1,8 @@
 module ApplicationHelper
   
   def question_status user_id, mcq_id
-    QuestionUserStatus.where(user_id: user_id, multiple_choice_question_id: mcq_id).last.status
+    question = QuestionUserStatus.where(user_id: user_id, multiple_choice_question_id: mcq_id).last
+    question_status = question.status if !question.nil?
   end
 
   def check_if_answered user_id, mcq_id

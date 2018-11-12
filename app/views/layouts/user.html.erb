@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>OnlineTestApp</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'user', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'user', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <%= render "layouts/user_header" %>
+    <%= yield %>
+  </body>
+</html>
