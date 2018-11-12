@@ -1,0 +1,29 @@
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-md-6">
+      <h1>Total Submission</h1>
+    </div>
+    <div class="col-md-6">
+      <%= link_to "Logout", destroy_admin_session_path, method: :delete, class: "btn btn-danger float-right" if admin_signed_in? %>
+    </div>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>User Name</th>
+        <th>Test Name</th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @submissions.each do |sub| %>
+        <tr>
+          <td><%= sub.user.username %></td>
+          <td><%= sub.test_paper.name %></td>
+          <td><%= link_to 'Show', admin_submission_path(sub), class: "btn btn-info" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

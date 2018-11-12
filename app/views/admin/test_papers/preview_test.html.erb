@@ -1,0 +1,76 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-12">
+      <div class="text-center mr-4 mb-5">
+        <%= link_to "Submit Test", test_submission_path(test_paper_id: @test_paper.id), class: "btn btn-success float-right" %>
+      </div>
+    </div>
+    <div class="col-12 mt-5">
+      <div class="row" id="test_question_area">
+        <div class="col-md-9">
+          <div class="card custom-card">
+            <div class="card-body">
+              <div>
+                <%= form_for :user_response, url: :user_response_values, method: :post, remote: true do |f| %>
+                  <%= f.hidden_field :submission_id, value: @submission.id %>
+                  <%= f.hidden_field :multiple_choice_question_id, value: @mcq.id %>
+                  <%= f.hidden_field :user_id, value: current_user.id %>
+                  <%= f.hidden_field :user_response_value_id, value: get_user_response_value(current_user.id, @mcq.id).id if get_user_response_value(current_user.id, @mcq.id).present?  %>
+                  <label><strong><%= @mcq.sequence_number %>. </strong> <%= @mcq.question %></label>
+                  <% @mcq.mcq_options.each do |mcq_opt| %>
+                    <% if check_if_answered(current_user.id, @mcq.id) %>
+                      <div class="form-group">
+                        <% if user_selected_option(current_user.id, @mcq.id) == mcq_opt.option %>
+                          <%= f.radio_button @mcq.question, mcq_opt.option, checked: true %>
+                        <% else %>
+                          <%= f.radio_button @mcq.question, mcq_opt.option %>
+                        <% end %>
+                        <%= f.label mcq_opt.option %>
+                      </div>
+                    <% else %>
+                      <div class="form-group">
+                        <%= f.radio_button @mcq.question, mcq_opt.option %>
+                        <%= f.label mcq_opt.option %>
+                      </div>
+                    <% end %>
+                  <% end %>
+                  <% if @mcq.id == @test_paper.multiple_choice_questions.first.id %>
+                    <%= link_to "Previous", "", class: "btn btn-primary disabled" %>
+                  <% else %>
+                    <%= link_to "Previous", load_previous_question_path(mcq_id: @mcq.id, submission: @submission.id), class: "btn btn-primary", remote: true %>
+                  <% end %>
+                  <% if @mcq.id == @test_paper.multiple_choice_questions.last.id %>
+                    <%= f.submit "Save", class: "btn btn-success" %>
+                  <% else %>
+                    <%= f.submit "Save & Next", class: "btn btn-success" %>
+                  <% end %>
+                  <%= link_to "Marked for Review & Next", question_marked_for_review_path(mcq_id: @mcq.id, submission_id: @submission.id), remote: true, class: "btn btn-primary btn-indigo" %>
+                  <% if @mcq.id == @test_paper.multiple_choice_questions.last.id %>
+                    <%= link_to "Next", "", class: "btn btn-info disabled" %>
+                  <% else %>
+                    <%= link_to "Next", load_next_question_path(mcq_id: @mcq.id, submission: @submission.id), class: "btn btn-info", remote: true %>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <% @test_paper.multiple_choice_questions.each do |mcq| %>
+            <% if mcq.question_user_statuses.present? && current_user.question_user_statuses.present? %>
+              <% user_id = current_user.id %>
+              <% mcq_id = mcq.id %>
+              <% if question_status(user_id, mcq_id) == "Answered" %>
+                <%= link_to mcq.sequence_number, load_question_path(mcq_id: mcq.id, submission: @submission.id), class: "btn btn-success btn-mark mb-2", remote: true %>
+              <% elsif question_status(user_id, mcq_id) == "Marked for Review" %>
+                <%= link_to mcq.sequence_number, load_question_path(mcq_id: mcq.id, submission: @submission.id), class: "btn btn-indigo btn-mark mb-2", remote: true %>
+              <% end %>
+            <% else %>
+              <%= link_to mcq.sequence_number, load_question_path(mcq_id: mcq.id, submission: @submission.id), class: "btn btn-secondary btn-mark mb-2", remote: true %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

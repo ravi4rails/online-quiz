@@ -1,0 +1,55 @@
+<div class="container mt-5">
+  <div class="col-md-10 offset-md-1">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="text-center"><%= @submission.test_paper.name %></h3>
+        <div class="row mt-3 font-12">
+          <div class="col-md-3 font-weight-bold">
+            Total Questions <button class="btn btn-default"><%= @submission.test_paper.multiple_choice_questions.count %></button>
+          </div>
+          <div class="col-md-3 font-weight-bold">
+            Questions Answered <button class="btn btn-info"><%= @submission.user_response_values.count %></button>
+          </div>
+          <div class="col-md-3 font-weight-bold">
+            Questions Unanswered <button class="btn btn-danger"><%= @submission.test_paper.multiple_choice_questions.count - @submission.user_response_values.count %></button>
+          </div>
+          <div class="col-md-3 font-weight-bold mx-auto">
+            Correct Answer 
+            <% if @score.nil? %>
+              <button class="btn btn-success">0</button>
+            <% else %>
+              <button class="btn btn-success"><%= @score %></button>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card">
+          <% @submission.user_response_values.each do |response_value| %>
+            <% response_value.form_values.each do |key, value| %>
+              <% @correct_answer = MultipleChoiceQuestion.find_by("question LIKE ?","#{key.strip}%").correct_answer%>
+              <div class="card-body">
+                <% if response_value.form_values[key].class == Array %>
+                  <li class="list-group-item">
+                    <h5><span><strong>Question:</strong> <%= key.titleize %></span> </h5>
+                    <% val_array = response_value.form_values[key].reject {|c| c.empty? }%>
+                    <% val_array.each do |val|%>
+                      <h6 style="text-align: justify;"><strong>Answer:</strong> <%= val %></h6>
+                    <% end %>
+                    <h6 style="text-align: justify;"><strong>Correct Answer:</strong> <%= @correct_answer %></h6>
+                  </li>
+                <% else %>
+                  <li class="list-group-item">
+                    <h5><span><strong>Question:</strong> <%= key.titleize %></span> </h5>
+                    <h6 style="text-align: justify;"><strong>Answer:</strong> <%= value %></h6>
+                     <h6 style="text-align: justify;"><strong>Correct Answer:</strong> <%= @correct_answer %></h6>
+                  </li>
+                <% end %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div> 
+  </div>
+</div>

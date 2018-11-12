@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
   root 'home#index'
   
+  devise_for :admins, controllers: {
+    sessions: 'admins/sessions',
+    registrations: 'admins/registrations'
+  }
+  
   devise_for :users, controllers: {
     sessions:       'users/sessions', 
     registrations:  'users/registrations', 
@@ -14,6 +19,11 @@ Rails.application.routes.draw do
       get :preview_test
       post :start_test_paper
     end
+  end
+
+  namespace :admin do
+    resources :test_papers 
+    resources :submissions, only: [:index, :show]
   end
 
   resources :multiple_choice_questions do 

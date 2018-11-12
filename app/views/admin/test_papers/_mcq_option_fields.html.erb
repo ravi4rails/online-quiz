@@ -1,0 +1,14 @@
+<div class="nested-fields">
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="form-group">
+        <%= f.text_field :option, class: "form-control", placeholder: "Write option here" %>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="form-group">
+        <%= link_to_remove_association "Remove Option", f, class: "btn btn-danger" %>
+      </div>
+    </div>
+  </div>
+</div>
