@@ -9,11 +9,19 @@
       <strong>Date to take test:</strong>
       <%= @test_paper.date_to_take_test %>
     </p>
+    <p>
+      <strong>Total questions in test:</strong>
+      <%= @test_paper.multiple_choice_questions.count %>
+    </p>
+    <p>
+      <strong>Total participants:</strong>
+      <%= @test_paper.submissions.count %>
+    </p>
 
-    <%= link_to 'Edit', edit_admin_test_paper_path(@test_paper), class: "btn btn-secondary btn-lg" %> 
+    <%= link_to 'Edit', edit_admin_test_paper_path(@test_paper), class: "btn btn-secondary" %> 
 
-    <%= link_to 'Back', admin_test_papers_path, class: "btn btn-primary btn-lg" %>
+    <%= link_to 'Back', admin_test_papers_path, class: "btn btn-primary" %>
 
-    <%= link_to 'Start Test', start_test_paper_test_paper_path(@test_paper), class: "btn btn-info btn-lg", method: :post %>
+    <%#= link_to 'Start Test', start_test_paper_test_paper_path(@test_paper), class: "btn btn-info btn-lg", method: :post %>
   </div>
 </div>
